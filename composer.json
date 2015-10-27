@@ -1,0 +1,48 @@
+{
+  "name": "websoft/zf2-phone-number",
+  "type": "zf2-module",
+  "description": "Integrates libphonenumber into your Zend Framework 2 application",
+  "license": "MIT",
+  "keywords": [
+    "module",
+    "phone-number",
+    "phonenumber",
+    "telephone number",
+    "libphonenumber",
+    "zf2",
+    "zend",
+    "framework"
+  ],
+  "homepage": "https://github.com/websoft/zf2-phone-number",
+  "authors": [
+    {
+      "name": "Websoft AG",
+      "email": "info@websoft.ch",
+      "homepage": "http://github.com/websoft"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/websoft/zf2-phone-number/phone-number-bundle/issues"
+  },
+  "require": {
+    "php": ">=5.3.3",
+    "giggsey/libphonenumber-for-php": "~5.7|~6.0|~7.0"
+  },
+  "require-dev": {
+  },
+  "conflict": {
+  },
+  "suggest": {
+  },
+  "minimum-stability": "alpha",
+  "autoload": {
+    "psr-4": {
+      "PhoneNumber\\": "src/PhoneNumber"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PhoneNumber\\": "test/"
+    }
+  }
+}
