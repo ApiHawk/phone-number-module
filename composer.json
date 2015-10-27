@@ -1,5 +1,5 @@
 {
-  "name": "websoft/zf2-phone-number",
+  "name": "phone-number-module",
   "type": "zf2-module",
   "description": "Integrates libphonenumber into your Zend Framework 2 application",
   "license": "MIT",
