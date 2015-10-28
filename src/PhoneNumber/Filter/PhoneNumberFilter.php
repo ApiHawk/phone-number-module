@@ -5,13 +5,16 @@ namespace PhoneNumber\Filter;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use Traversable;
 use Zend\Filter\AbstractFilter;
 use Zend\Filter\Exception;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class PhoneNumberFilter
+ *
  * @package PhoneNumber\Filter
  */
 class PhoneNumberFilter extends AbstractFilter implements
@@ -39,6 +42,27 @@ class PhoneNumberFilter extends AbstractFilter implements
     public function setRegion($region)
     {
         $this->region = $region;
+    }
+
+    /**
+     * Sets the filter options.
+     *
+     * Allowed options are:
+     *  'region'    => The region code used for parsing the number
+     *
+     * @param string|array|Traversable $options
+     */
+    public function __construct($options = null)
+    {
+        if ($options instanceof Traversable) {
+            $options = ArrayUtils::iteratorToArray($options);
+        }
+
+        if (is_array($options) && !empty($options)) {
+            if (isset($options['region'])) {
+                $this->setRegion($options['region']);
+            }
+        }
     }
 
     /**
