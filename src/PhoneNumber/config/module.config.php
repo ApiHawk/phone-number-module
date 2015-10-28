@@ -1,8 +1,10 @@
 <?php
 
+namespace PhoneNumber;
+
 return [
     'phone_number' => [
-        'default_locale' => 'GB',
+        'default_region' => 'CH',
     ],
     'service_manager' => [
         'invokables' => [

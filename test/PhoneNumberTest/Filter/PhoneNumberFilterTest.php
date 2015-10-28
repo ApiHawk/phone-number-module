@@ -2,6 +2,7 @@
 
 namespace PhoneNumberTest\Filter;
 
+use Mockery;
 use PhoneNumber\Filter\PhoneNumberFilter;
 use PhoneNumber\Test\Zend\ServiceManager\ServiceLocatorMock;
 use PHPUnit_Framework_TestCase;
@@ -39,20 +40,36 @@ class PhoneNumberFilterTest extends PHPUnit_Framework_TestCase
      */
     public function filterValidNumber()
     {
-        $value = '+41798000000';
-        $phoneNumber = $this->filter->filter($value);
-        $this->assertEquals('Country Code: 41 National Number: 798000000 Country Code Source: ', $phoneNumber);
+        $values = [
+            '  +41 79 800 00 00  ',
+            '  +41  798000000!!',
+            'xx0798000000xx',
+            '798000000',
+        ];
+        foreach ($values as $value) {
+            $phoneNumber = $this->filter->filter($value);
+            $this->assertEquals('+41798000000', $phoneNumber, "Given number '$value' is not ok");
+        }
     }
 
     /**
      * @test
-     * @expectedException \libphonenumber\NumberParseException
      */
     public function filterInvalid()
     {
-        $value = null;
-        $phoneNumber = $this->filter->filter($value);
-        $this->assertEquals('Country Code: 41 National Number:  Country Code Source: ', $phoneNumber);
+        $values = [
+            null,
+            'null',
+            ' ',
+            '  +41 79 800 00 00!!cs',
+            '+17980002000',
+            '07 98 000000 x2',
+            '7980000002',
+        ];
+        foreach ($values as $value) {
+            $phoneNumber = $this->filter->filter($value);
+            $this->assertNotEquals('+41798000000', $phoneNumber, "Given number '$value' is not ok");
+        }
     }
 
     /**
@@ -65,10 +82,16 @@ class PhoneNumberFilterTest extends PHPUnit_Framework_TestCase
                 'default_locale' => 'CH'
             ]
         ];
+
         $serviceLocator = ServiceLocatorMock::get([
             'Config' => $config,
         ]);
 
-        return $serviceLocator;
+        $serviceManager = Mockery::mock('Zend\InputFilter\InputFilterPluginManager');
+        $serviceManager
+            ->shouldReceive('getServiceLocator')
+            ->andReturn($serviceLocator);
+
+        return $serviceManager;
     }
 }

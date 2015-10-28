@@ -2,6 +2,7 @@
 
 namespace PhoneNumberTest\Validator;
 
+use Mockery;
 use PhoneNumber\Test\Zend\ServiceManager\ServiceLocatorMock;
 use PhoneNumber\Validator\PhoneNumberValidator;
 use PHPUnit_Framework_TestCase;
@@ -38,17 +39,35 @@ class PhoneNumberValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function assertValid()
     {
-        $number = "+41795000000";
-        $this->assertTrue($this->validator->isValid($number));
+        $values = [
+            '  +41 79 800 00 00  ',
+            '  +41  798000000!!',
+            'xx0798000000xx',
+            '798000000',
+        ];
+        foreach ($values as $number) {
+            $this->assertTrue($this->validator->isValid($number));
+        }
     }
 
     /**
      * @test
      */
-    public function assertInvvalid()
+    public function assertInvalid()
     {
-        $number = "+417950000001";
-        $this->assertFalse($this->validator->isValid($number));
+        $values = [
+            null,
+            'null',
+            ' ',
+            '  +41 79<>800 00 00!!cs',
+            ' +17 98000 2000',
+            ' 07 98 000 000 -- 1',
+            '7980000002',
+            '+4189287',
+        ];
+        foreach ($values as $number) {
+            $this->assertFalse($this->validator->isValid($number), "Given number '$number' should be not valid");
+        }
     }
 
     /**
@@ -61,10 +80,16 @@ class PhoneNumberValidatorTest extends PHPUnit_Framework_TestCase
                 'default_locale' => 'CH'
             ]
         ];
+
         $serviceLocator = ServiceLocatorMock::get([
             'Config' => $config,
         ]);
 
-        return $serviceLocator;
+        $serviceManager = Mockery::mock('Zend\InputFilter\InputFilterPluginManager');
+        $serviceManager
+            ->shouldReceive('getServiceLocator')
+            ->andReturn($serviceLocator);
+
+        return $serviceManager;
     }
 }

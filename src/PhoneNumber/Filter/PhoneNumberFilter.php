@@ -3,7 +3,7 @@
 namespace PhoneNumber\Filter;
 
 use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Zend\Filter\AbstractFilter;
 use Zend\Filter\Exception;
@@ -21,22 +21,48 @@ class PhoneNumberFilter extends AbstractFilter implements
     use ServiceLocatorAwareTrait;
 
     /**
+     * @var string
+     */
+    private $region;
+
+    /**
+     * @return string
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param mixed $region
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+    /**
      * Returns the result of filtering $value.
      *
-     * @param mixed  $value
-     * @param string $locale Defaults to module config option 'default_locale'.
+     * @param mixed $value
      *
      * @return mixed
      * @throws Exception\RuntimeException If filtering $value is impossible.
      */
-    public function filter($value, $locale = null)
+    public function filter($value)
     {
-        $locale = isset($locale) ? $locale : $this->getDefaultLocale();
+        $region = $this->getRegion();
+        $region = isset($region) ? $region : $this->getDefaultRegion();
+
         $phoneUtil = $this->getPhoneNUmberUtil();
 
-        $numberProto = $phoneUtil->parse($value, $locale);
+        try {
+            $numberProto = $phoneUtil->parse($value, $region);
+        } catch (NumberParseException $e) {
+            return $value;
+        }
 
-        return $numberProto->__toString();
+        return $phoneUtil->format($numberProto, PhoneNumberFormat::E164);
     }
 
     /**
@@ -50,17 +76,26 @@ class PhoneNumberFilter extends AbstractFilter implements
     /**
      * @return string
      */
-    private function getDefaultLocale()
+    private function getDefaultRegion()
     {
-        $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getConfig();
+
         if (
             isset($config) &&
             isset($config['phone_number']) &&
-            isset($config['phone_number']['default_locale'])
+            isset($config['phone_number']['default_region'])
         ) {
-            return $config['phone_number']['default_locale'];
+            return $config['phone_number']['default_region'];
         } else {
-            return 'GB';
+            return 'CH';
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('Config');
     }
 }

@@ -8,6 +8,7 @@ use Zend\Di\ServiceLocator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Validator\AbstractValidator;
+use Zend\Validator\Exception;
 
 /**
  * Class PhoneNumberValidator
@@ -21,25 +22,56 @@ class PhoneNumberValidator extends AbstractValidator implements
 
     const INVALID = 'invalid';
 
+    /**
+     * @var string
+     */
+    private $region;
+
+    /**
+     * @var array
+     */
     protected $messageTemplates = [
         self::INVALID => "'%value%' is not a valid phone number"
     ];
 
     /**
-     * @param mixed  $value
-     * @param string $locale Defaults to module config option 'default_locale'.
+     * @return string
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param string $region
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+    /**
+     * Returns true if and only if $value meets the validation requirements.
+     *
+     * If $value fails validation, then this method returns false, and
+     * getMessages() will return an array of messages that explain why the
+     * validation failed.
+     *
+     * @param mixed $value
      *
      * @return boolean
+     * @throws Exception\RuntimeException If validation of $value is impossible.
      */
-    public function isValid($value, $locale = null)
+    public function isValid($value)
     {
-        $locale = isset($locale) ? $locale : $this->getDefaultLocale();
+        $region = $this->getRegion();
+        $region = isset($region) ? $region : $this->getDefaultRegion();
 
         $this->setValue($value);
         $phoneUtil = $this->getPhoneNUmberUtil();
 
         try {
-            $numberProto = $phoneUtil->parse($value, $locale);
+            $numberProto = $phoneUtil->parse($value, $region);
         } catch (NumberParseException $e) {
             $this->error(self::INVALID);
             return false;
@@ -64,17 +96,26 @@ class PhoneNumberValidator extends AbstractValidator implements
     /**
      * @return string
      */
-    private function getDefaultLocale()
+    private function getDefaultRegion()
     {
-        $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getConfig();
+
         if (
             isset($config) &&
             isset($config['phone_number']) &&
-            isset($config['phone_number']['default_locale'])
+            isset($config['phone_number']['default_region'])
         ) {
-            return $config['phone_number']['default_locale'];
+            return $config['phone_number']['default_region'];
         } else {
-            return 'GB';
+            return 'CH';
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('Config');
     }
 }
