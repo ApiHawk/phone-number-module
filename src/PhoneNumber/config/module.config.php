@@ -2,6 +2,8 @@
 
 namespace PhoneNumber;
 
+use PhoneNumber\Delegator\ValidatorConfigDelegator;
+
 return [
     'phone_number' => [
         'default_region' => 'CH',
@@ -13,6 +15,9 @@ return [
         ],
         'factories' => [
             'libphonenumber\PhoneNumberUtil' => 'PhoneNumber\Factory\PhoneNumberUtilFactory',
+        ],
+        'delegators' => [
+            Validator\PhoneNumberValidator::class => ValidatorConfigDelegator::class,
         ],
         'shared' => [
         ],

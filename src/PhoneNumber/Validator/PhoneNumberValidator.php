@@ -4,9 +4,6 @@ namespace PhoneNumber\Validator;
 
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
-use Zend\Di\ServiceLocator;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Validator\AbstractValidator;
 use Zend\Validator\Exception;
 
@@ -14,13 +11,12 @@ use Zend\Validator\Exception;
  * Class PhoneNumberValidator
  * @package PhoneNumber
  */
-class PhoneNumberValidator extends AbstractValidator implements
-    ServiceLocatorAwareInterface
+class PhoneNumberValidator extends AbstractValidator
 {
-
-    use ServiceLocatorAwareTrait;
-
     const INVALID = 'invalid';
+
+    /** @var array  */
+    private $config = [];
 
     /**
      * @var string
@@ -116,6 +112,14 @@ class PhoneNumberValidator extends AbstractValidator implements
      */
     private function getConfig()
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('Config');
+        return $this->config;
+    }
+
+    /**
+     * @param mixed $config
+     */
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
     }
 }
