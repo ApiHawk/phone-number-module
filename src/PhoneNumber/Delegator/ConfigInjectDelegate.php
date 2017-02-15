@@ -16,6 +16,6 @@ class ConfigInjectDelegate implements \Zend\ServiceManager\Factory\DelegatorFact
         callable $callback,
         array $options = null
     ) {
-        return method_exists($callback, 'setConfig') ? $callback->setConfig($container->get('Config')) : $callback;
+        return method_exists($callback, 'injectConfig') ? $callback->injectConfig($container->get('Config')) : $callback;
     }
 }

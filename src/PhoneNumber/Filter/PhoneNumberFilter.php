@@ -125,7 +125,7 @@ class PhoneNumberFilter extends AbstractFilter
     /**
      * @param mixed $config
      */
-    public function setConfig($config)
+    public function injectConfig($config)
     {
         $this->config = $config;
     }

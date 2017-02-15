@@ -118,7 +118,7 @@ class PhoneNumberValidator extends AbstractValidator
     /**
      * @param mixed $config
      */
-    public function setConfig(array $config)
+    public function injectConfig(array $config)
     {
         $this->config = $config;
     }
