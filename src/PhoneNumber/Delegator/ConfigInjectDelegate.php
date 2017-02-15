@@ -8,7 +8,7 @@ namespace PhoneNumber\Delegator;
  * Date: 2/15/17
  * Time: 2:23 PM
  */
-class ValidatorConfigDelegator implements \Zend\ServiceManager\Factory\DelegatorFactoryInterface
+class ConfigInjectDelegate implements \Zend\ServiceManager\Factory\DelegatorFactoryInterface
 {
     public function __invoke(
         \Interop\Container\ContainerInterface $container,

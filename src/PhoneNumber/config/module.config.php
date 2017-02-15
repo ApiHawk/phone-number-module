@@ -2,7 +2,7 @@
 
 namespace PhoneNumber;
 
-use PhoneNumber\Delegator\ValidatorConfigDelegator;
+use PhoneNumber\Delegator\ConfigInjectDelegate;
 
 return [
     'phone_number' => [
@@ -17,7 +17,7 @@ return [
             'libphonenumber\PhoneNumberUtil' => 'PhoneNumber\Factory\PhoneNumberUtilFactory',
         ],
         'delegators' => [
-            Validator\PhoneNumberValidator::class => ValidatorConfigDelegator::class,
+            Validator\PhoneNumberValidator::class => ConfigInjectDelegate::class,
         ],
         'shared' => [
         ],

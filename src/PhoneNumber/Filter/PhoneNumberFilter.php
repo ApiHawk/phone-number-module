@@ -8,8 +8,6 @@ use libphonenumber\PhoneNumberUtil;
 use Traversable;
 use Zend\Filter\AbstractFilter;
 use Zend\Filter\Exception;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -17,16 +15,17 @@ use Zend\Stdlib\ArrayUtils;
  *
  * @package PhoneNumber\Filter
  */
-class PhoneNumberFilter extends AbstractFilter implements
-    ServiceLocatorAwareInterface
+class PhoneNumberFilter extends AbstractFilter
 {
-
-    use ServiceLocatorAwareTrait;
-
     /**
      * @var string
      */
     private $region;
+
+    /**
+     * @var
+     */
+    private $config;
 
     /**
      * @return string
@@ -120,6 +119,14 @@ class PhoneNumberFilter extends AbstractFilter implements
      */
     private function getConfig()
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('Config');
+        return $this->config;
+    }
+
+    /**
+     * @param mixed $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 }
