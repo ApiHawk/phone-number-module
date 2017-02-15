@@ -2,9 +2,10 @@
 
 namespace PhoneNumber\Factory;
 
+use Interop\Container\ContainerInterface;
 use libphonenumber\PhoneNumberUtil;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+
 
 /**
  * Class PhoneNumberUtilFactory
@@ -12,14 +13,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class PhoneNumberUtilFactory implements FactoryInterface
 {
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return PhoneNumberUtil|mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         return $phoneNumberUtil;
     }
