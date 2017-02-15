@@ -15,7 +15,6 @@ class PhoneNumberUtilFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         return $phoneNumberUtil;
     }
