@@ -3,18 +3,19 @@
 namespace PhoneNumber;
 
 use PhoneNumber\Delegator\ConfigInjectDelegate;
+use PhoneNumber\Filter\PhoneNumberFilter;
+use PhoneNumber\Validator\PhoneNumberValidator;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'phone_number' => [
         'default_region' => 'CH',
     ],
     'service_manager' => [
-        'invokables' => [
-            'PhoneNumber\Filter\PhoneNumberFilter' => 'PhoneNumber\Filter\PhoneNumberFilter',
-            'PhoneNumber\Validator\PhoneNumberValidator' => 'PhoneNumber\Validator\PhoneNumberValidator',
-        ],
         'factories' => [
             'libphonenumber\PhoneNumberUtil' => 'PhoneNumber\Factory\PhoneNumberUtilFactory',
+            PhoneNumberValidator::class      => InvokableFactory::class,
+            PhoneNumberFilter::class         => InvokableFactory::class,
         ],
         'delegators' => [
             Validator\PhoneNumberValidator::class => ConfigInjectDelegate::class,
