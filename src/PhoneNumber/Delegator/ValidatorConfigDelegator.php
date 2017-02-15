@@ -16,6 +16,6 @@ class ValidatorConfigDelegator implements \Zend\ServiceManager\Factory\Delegator
         callable $callback,
         array $options = null
     ) {
-        return method_exists($callback, 'setServiceLocator') ? $callback->setConfig($container->get('Config')) : $callback;
+        return method_exists($callback, 'setConfig') ? $callback->setConfig($container->get('Config')) : $callback;
     }
 }
