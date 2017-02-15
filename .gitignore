@@ -1,5 +1,7 @@
+.idea
 auth.json
-.idea/*
 composer.phar
 composer.lock
 *~
+phone-number-module.iml
+vendor
