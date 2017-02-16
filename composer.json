@@ -1,5 +1,5 @@
 {
-  "name": "websoft/phone-number-module",
+  "name": "ApiHawk/phone-number-module",
   "type": "zf2-module",
   "description": "Integrates libphonenumber into your Zend Framework 2 application",
   "license": "MIT",
